@@ -16,23 +16,34 @@ namespace Moment_5
         {
             Console.Clear();
             Console.WriteLine("Let's play hangman!\r\n");
-            Console.WriteLine("Pick a difficulty: ");
-            Console.WriteLine("1. Easy");
-            Console.WriteLine("2. Medium");
-            Console.WriteLine("3. Hard \r\n");
 
-            string difficulty = Console.ReadLine();
-            string fileName = difficulty + ".txt";
-
-            WordLoader wordLoader = new WordLoader();
-            string[] words = wordLoader.LoadWordsFromFile(fileName);
-
-            if (words.Length == 0)
+            string[] words;
+            
+            //While-loop for input validation
+            while (true)
             {
-                Console.WriteLine("The file is empty or not found.");
-                return;
+                Console.WriteLine("Pick a difficulty: ");
+                Console.WriteLine("1. Easy");
+                Console.WriteLine("2. Medium");
+                Console.WriteLine("3. Hard \r\n");
+
+                string difficulty = Console.ReadLine();
+                string fileName = difficulty + ".txt";
+
+                //Loads text file corresponding to previous input
+                WordLoader wordLoader = new WordLoader();
+                words = wordLoader.LoadWordsFromFile(fileName);
+
+                if (words.Length > 0)
+                {
+                    break;
+                }
+
+                Console.Clear();
+                Console.WriteLine("Invalid input. Please try again.\r\n");
             }
 
+            //Creates new instance of class Game to handle game logic
             Game game = new Game(words);
             game.Play();
         }

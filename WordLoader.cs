@@ -7,17 +7,18 @@ Moment 5
 
 namespace Moment_5;
 
+//Class for loading words from tex files
 public class WordLoader
 {
+    //Loads words form text file if possible
     public string[] LoadWordsFromFile(string fileName)
     {
         try
         {
             return File.ReadAllLines(fileName);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine("Error reading file: " + ex.Message);
             return Array.Empty<string>();
         }
     }

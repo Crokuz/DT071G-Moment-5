@@ -7,47 +7,58 @@ Moment 5
 
 namespace Moment_5;
 
+//Class for handeling game logic
 public class Game
 {
-    private readonly string _randomWord;
-    private string _guessWord;
-    private int _wrongGuess;
-    private string _guesses;
-    private bool _win;
+    private readonly string randomWord;
+    private string guessWord;
+    private int wrongGuess;
+    private string guesses;
+    private bool win;
 
+    //Constructor for Game class
     public Game(string[] words)
     {
+        //Generates pseudo-random number for fetching word from text file
         Random random = new Random();
-        _randomWord = words[random.Next(words.Length)];
-        _guessWord = new string('_', _randomWord.Length);
-        _wrongGuess = 0;
-        _guesses = "";
-        _win = false;
+        randomWord = words[random.Next(words.Length)];
+        guessWord = new string('_', randomWord.Length);
+        wrongGuess = 0;
+        guesses = "";
+        win = false;
     }
 
+    //Main game method for user interaction
     public void Play()
     {
+        //Creates new instance of class HangmanDisplay to display game progression
         HangmanDisplay display = new HangmanDisplay();
 
-        while (_wrongGuess < 5 && !_win)
+        while (wrongGuess < 5 && !win)
         {
             Console.Clear();
-            Console.WriteLine("Letters guessed: " + _guesses);
-            Console.WriteLine("Progression: " + _guessWord);
-            Console.WriteLine(display.GetStage(_wrongGuess));
+            //Prints display for corresponding number of wrong guesses
+            Console.WriteLine(display.GetStage(wrongGuess));
+            //Prints string of previous guesses
+            Console.WriteLine("Letters guessed: " + guesses);
+            //Prints word progression
+            Console.WriteLine("Progression: " + guessWord);
 
             string letter = GetLetterFromUser();
             ProcessGuess(letter);
 
-            if (!_guessWord.Contains('_'))
+            //If the string guessWord no longer contains any placeholder characters, the game is won
+            if (!guessWord.Contains('_'))
             {
-                _win = true;
+                win = true;
             }
         }
 
-        EndGame();
+        //Displays endgame information
+        EndGame(display.GetStage(wrongGuess));
     }
 
+    //Method for getting and validating user input
     private string GetLetterFromUser()
     {
         while (true)
@@ -55,9 +66,10 @@ public class Game
             Console.WriteLine("Enter a letter:");
             string letter = Console.ReadLine()?.ToUpper();
 
+            //Validates that input is not null and is a single letter
             if (!string.IsNullOrEmpty(letter) && letter.Length == 1 && char.IsLetter(letter[0]))
             {
-                _guesses += letter;
+                guesses += letter;
                 return letter;
             }
             else
@@ -67,36 +79,41 @@ public class Game
         }
     }
 
+    //Method for handeling game progression
     private void ProcessGuess(string letter)
     {
         bool found = false;
 
-        for (int i = 0; i < _randomWord.Length; i++)
+        for (int i = 0; i < randomWord.Length; i++)
         {
-            if (_randomWord[i].ToString().Equals(letter, StringComparison.OrdinalIgnoreCase))
+            //Reveals the letter at it's corresponding location if guessed correctly 
+            if (randomWord[i].ToString().Equals(letter, StringComparison.OrdinalIgnoreCase))
             {
-                _guessWord = _guessWord.Remove(i, 1).Insert(i, letter);
+                guessWord = guessWord.Remove(i, 1).Insert(i, letter);
                 found = true;
             }
         }
 
         if (!found)
         {
-            _wrongGuess++;
+            wrongGuess++;
         }
     }
 
-    private void EndGame()
+    //Method for displaying endgame information
+    private void EndGame(string hangman)
     {
         Console.Clear();
-        if (_wrongGuess == 5)
+        if (wrongGuess == 5)
         {
-            Console.WriteLine("The word was: " + _randomWord);
+            Console.WriteLine(hangman);
+            Console.WriteLine("The word was: " + randomWord);
             Console.WriteLine("Better luck next time!");
         }
         else
         {
-            Console.WriteLine("The word was: " + _randomWord);
+            Console.WriteLine(hangman);
+            Console.WriteLine("The word was: " + randomWord);
             Console.WriteLine("Congratulations!");
         }
     }

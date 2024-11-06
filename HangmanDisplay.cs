@@ -7,9 +7,11 @@ Moment 5
 
 namespace Moment_5;
 
+//Class for handeling game progression through ASCII art
 public class HangmanDisplay
 {
-    private readonly string[] _hangmanStages = {
+    //String for storing different stages of the game
+    private readonly string[] hangmanStages = {
         " +-----+\r\n O     |\r\n       |\r\n       |\r\n========",
         " +-----+\r\n O     |\r\n |     |\r\n       |\r\n========",
         " +-----+\r\n O     |\r\n/|     |\r\n       |\r\n========",
@@ -18,9 +20,10 @@ public class HangmanDisplay
         " +-----+\r\n O     |\r\n/|\\    |\r\n/ \\    |\r\n========"
     };
 
+    //Returns corresponding stage of the game based on number of wrong guesses
     public string GetStage(int wrongGuess)
     {
-        return _hangmanStages[Math.Min(wrongGuess, _hangmanStages.Length - 1)];
+        return hangmanStages[Math.Min(wrongGuess, hangmanStages.Length - 1)];
     }
 }
 
